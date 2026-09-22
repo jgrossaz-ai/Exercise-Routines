@@ -5,15 +5,48 @@
 <div class='nav'><button id='routineBtn' class='primary'>Weekly Routine</button><button id='historyBtn' class='secondary'>History</button></div>
 <script>
 const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-const keyR='exerciseRoutines.v1',keyH='exerciseHistory.v1';let routines=JSON.parse(localStorage.getItem(keyR)||'{}'),history=JSON.parse(localStorage.getItem(keyH)||'[]');days.forEach(d=>routines[d]??=[]);
+const keyR='exerciseRoutines.v1',keyH='exerciseHistory.v1',keyC='exerciseCompleted.v1';
+let routines=JSON.parse(localStorage.getItem(keyR)||'{}'),
+    history=JSON.parse(localStorage.getItem(keyH)||'[]'),
+    completed=JSON.parse(localStorage.getItem(keyC)||'{}');
+days.forEach(d=>routines[d]??=[]);
+
+function mostRecentSundayEvening(){
+  const now=new Date(), boundary=new Date(now);
+  const daysSinceSunday=now.getDay();
+  boundary.setDate(now.getDate()-daysSinceSunday);
+  boundary.setHours(19,0,0,0);
+  if(now<boundary) boundary.setDate(boundary.getDate()-7);
+  return boundary;
+}
+function resetWeeklyIfNeeded(){
+  const boundary=mostRecentSundayEvening().getTime();
+  let changed=false;
+  Object.keys(completed).forEach(k=>{
+    if(Number(completed[k])<boundary){delete completed[k];changed=true}
+  });
+  if(changed) localStorage.setItem(keyC,JSON.stringify(completed));
+}
+function completionKey(day,name){return day+'::'+name}
+resetWeeklyIfNeeded();
 let selected=days[(new Date().getDay()+6)%7];
-const save=()=>{localStorage.setItem(keyR,JSON.stringify(routines));localStorage.setItem(keyH,JSON.stringify(history))};
+const save=()=>{localStorage.setItem(keyR,JSON.stringify(routines));localStorage.setItem(keyH,JSON.stringify(history));localStorage.setItem(keyC,JSON.stringify(completed))};
 function renderTabs(){dayTabs.innerHTML='';days.forEach(d=>{let b=document.createElement('button');b.textContent=d.slice(0,3);b.className=d===selected?'active':'';b.onclick=()=>{selected=d;showRoutine();render()};dayTabs.appendChild(b)})}
-function render(){renderTabs();dayTitle.textContent=selected;exerciseList.innerHTML='';if(!routines[selected].length) exerciseList.innerHTML='<div class="empty">No exercises entered for this day yet.</div>';routines[selected].forEach((x,i)=>{let el=document.createElement('div');el.className='exercise';let n=document.createElement('div');n.className='name';n.textContent=x;let done=document.createElement('button');done.className='done';done.textContent='Completed ?';done.onclick=()=>complete(x,done);let del=document.createElement('button');del.className='danger';del.textContent='Delete';del.onclick=()=>{if(confirm('Delete this exercise?')){routines[selected].splice(i,1);save();render()}};el.append(n,done,del);exerciseList.appendChild(el)})}
+function render(){renderTabs();dayTitle.textContent=selected;exerciseList.innerHTML='';if(!routines[selected].length) exerciseList.innerHTML='<div class="empty">No exercises entered for this day yet.</div>';routines[selected].forEach((x,i)=>{let el=document.createElement('div');el.className='exercise';let n=document.createElement('div');n.className='name';n.textContent=x;let done=document.createElement('button');let ck=completionKey(selected,x);let isDone=!!completed[ck];done.className='done'+(isDone?' confirmed':'');done.textContent=isDone?'✓ Completed':'Completed ?';done.disabled=isDone;done.onclick=()=>complete(x,done);let del=document.createElement('button');del.className='danger';del.textContent='Delete';del.onclick=()=>{if(confirm('Delete this exercise?')){routines[selected].splice(i,1);save();render()}};el.append(n,done,del);exerciseList.appendChild(el)})}
 function add(){let x=exerciseInput.value.trim();if(!x)return;routines[selected].push(x);exerciseInput.value='';save();render()}
-function complete(name,button){history.unshift({name,day:selected,when:new Date().toISOString()});save();button.textContent='✓ Completed';button.classList.add('confirmed');button.disabled=true;}
+function complete(name,button){
+  const now=new Date();
+  completed[completionKey(selected,name)]=now.getTime();
+  history.unshift({name,day:selected,when:now.toISOString()});
+  save();
+  button.textContent='✓ Completed';
+  button.classList.add('confirmed');
+  button.disabled=true;
+}
 function renderHistory(){historyList.innerHTML='';if(!history.length){historyList.innerHTML='<div class="empty">No completed exercises yet.</div>';return}history.forEach(h=>{let d=new Date(h.when);let el=document.createElement('div');el.className='history-item';let b=document.createElement('b');b.textContent='✓ '+h.name;let s=document.createElement('span');s.textContent=h.day+' • '+d.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'})+' • '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});el.append(b,s);historyList.appendChild(el)})}
 function showRoutine(){routineView.classList.remove('hidden');historyView.classList.add('hidden');routineBtn.className='primary';historyBtn.className='secondary'}
 addBtn.onclick=add;exerciseInput.onkeydown=e=>{if(e.key==='Enter')add()};routineBtn.onclick=showRoutine;historyBtn.onclick=()=>{routineView.classList.add('hidden');historyView.classList.remove('hidden');routineBtn.className='secondary';historyBtn.className='primary';renderHistory()};clearHistory.onclick=()=>{if(confirm('Clear all completion history?')){history=[];save();renderHistory()}};render();
+setInterval(()=>{resetWeeklyIfNeeded();render()},60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){resetWeeklyIfNeeded();render()}});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
 </script></body></html>
