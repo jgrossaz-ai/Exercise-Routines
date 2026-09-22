@@ -1,5 +1,9 @@
 <!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover'><meta name='theme-color' content='#f5f5f7'><link rel='manifest' href='manifest.json'><link rel='apple-touch-icon' href='icon.svg'><title>Exercise Routines</title><style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#f5f5f7}*{box-sizing:border-box}body{margin:0}header{position:sticky;top:0;background:rgba(245,245,247,.94);backdrop-filter:blur(12px);padding:18px 16px 12px;border-bottom:1px solid #ddd;z-index:2}h1{font-size:28px;margin:0 0 12px}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:2px}.tabs button,.primary,.secondary,.done,.danger{border:0;border-radius:12px;font-size:16px;font-weight:650;padding:12px 14px}.tabs button{background:#e5e5ea;white-space:nowrap}.tabs button.active,.primary{background:#007aff;color:white}main{max-width:700px;margin:auto;padding:16px 16px 90px}.card{background:white;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 1px 3px #0001}.row{display:flex;gap:10px;align-items:center}.row input{flex:1;border:1px solid #ccc;border-radius:12px;padding:13px;font-size:17px}.exercise{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #eee}.exercise:last-child{border:0}.name{flex:1;font-size:18px}.done{background:#ffd60a;color:#111}.done.confirmed{background:#34c759;color:white}.danger{background:#ff3b30;color:white;padding:10px 12px}.secondary{background:#e5e5ea}.empty{color:#666;padding:10px 0}.history-item{padding:12px 0;border-bottom:1px solid #eee}.history-item:last-child{border:0}.history-item b{display:block;font-size:17px}.history-item span{color:#666;font-size:14px}.nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;display:flex;justify-content:center;gap:8px;padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));z-index:3}.nav button{flex:1;max-width:330px}.hidden{display:none}</style></head><body>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#f5f5f7}*{box-sizing:border-box}body{margin:0}header{position:sticky;top:0;background:rgba(245,245,247,.94);backdrop-filter:blur(12px);padding:18px 16px 12px;border-bottom:1px solid #ddd;z-index:2}h1{font-size:28px;margin:0 0 12px}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:2px}.tabs button,.primary,.secondary,.done,.danger{border:0;border-radius:12px;font-size:16px;font-weight:650;padding:12px 14px}.tabs button{background:#e5e5ea;white-space:nowrap}.tabs button.active,.primary{background:#007aff;color:white}main{max-width:700px;margin:auto;padding:16px 16px 90px}.card{background:white;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 1px 3px #0001}.row{display:flex;gap:10px;align-items:center}.row input{flex:1;border:1px solid #ccc;border-radius:12px;padding:13px;font-size:17px}.exercise{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #eee}.exercise:last-child{border:0}.name{flex:1;font-size:18px}.done{background:#ffd60a;color:#111}.done.confirmed{background:#34c759;color:white}.danger{background:#ff3b30;color:white;padding:10px 12px}.secondary{background:#e5e5ea}.empty{color:#666;padding:10px 0}.history-item{padding:12px 0;border-bottom:1px solid #eee}.history-item:last-child{border:0}.history-item b{display:block;font-size:17px}.history-item span{color:#666;font-size:14px}.nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;display:flex;justify-content:center;gap:8px;padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));z-index:3}.nav button{flex:1;max-width:330px}.hidden{display:none}.history-group{margin-top:20px}
+.history-group h3{margin:0 0 8px;font-size:18px}
+.summary{background:#f3f4f6;border-radius:12px;padding:14px;margin:10px 0 18px;font-weight:700}
+.summary small{display:block;margin-top:4px;font-weight:500;color:#4b5563}
+</style></head><body>
 <header><h1>Exercise Routines</h1><div id='dayTabs' class='tabs'></div></header>
 <main><section id='routineView'><div class='card'><h2 id='dayTitle'></h2><div class='row'><input id='exerciseInput' placeholder='Enter an exercise' autocomplete='off'><button id='addBtn' class='primary'>Add</button></div></div><div id='exerciseList' class='card'></div></section><section id='historyView' class='hidden'><div class='card'><div class='row' style='justify-content:space-between'><h2 style='margin:0'>Completed Exercises</h2><button id='clearHistory' class='secondary'>Clear</button></div><div id='historyList'></div></div></section></main>
 <div class='nav'><button id='routineBtn' class='primary'>Weekly Routine</button><button id='historyBtn' class='secondary'>History</button></div>
@@ -43,7 +47,53 @@ function complete(name,button){
   button.classList.add('confirmed');
   button.disabled=true;
 }
-function renderHistory(){historyList.innerHTML='';if(!history.length){historyList.innerHTML='<div class="empty">No completed exercises yet.</div>';return}history.forEach(h=>{let d=new Date(h.when);let el=document.createElement('div');el.className='history-item';let b=document.createElement('b');b.textContent='✓ '+h.name;let s=document.createElement('span');s.textContent=h.day+' • '+d.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'})+' • '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});el.append(b,s);historyList.appendChild(el)})}
+function startOfWeek(d){
+  const x=new Date(d), diff=(x.getDay()+6)%7;
+  x.setDate(x.getDate()-diff); x.setHours(0,0,0,0); return x;
+}
+function renderHistory(){
+  hist.innerHTML='';
+  const now=new Date(), thisStart=startOfWeek(now), lastStart=new Date(thisStart);
+  lastStart.setDate(lastStart.getDate()-7);
+
+  const totalThisWeek=days.reduce((n,d)=>n+routines[d].length,0);
+  const doneThisWeek=Object.keys(completed).filter(k=>Number(completed[k])>=thisStart.getTime()).length;
+
+  const summary=document.createElement('div');
+  summary.className='summary';
+  summary.textContent=doneThisWeek+' of '+totalThisWeek+' exercises completed this week';
+  const small=document.createElement('small');
+  small.textContent=totalThisWeek ? Math.round(doneThisWeek/totalThisWeek*100)+'% complete' : 'Add exercises to begin tracking your week.';
+  summary.appendChild(small);
+  hist.appendChild(summary);
+
+  const groups={'This Week':[],'Last Week':[],'Older':[]};
+  history.forEach(h=>{
+    const dt=new Date(h.when);
+    if(dt>=thisStart) groups['This Week'].push(h);
+    else if(dt>=lastStart) groups['Last Week'].push(h);
+    else groups['Older'].push(h);
+  });
+
+  let any=false;
+  Object.entries(groups).forEach(([label,items])=>{
+    if(!items.length)return;
+    any=true;
+    const section=document.createElement('div'); section.className='history-group';
+    const title=document.createElement('h3'); title.textContent=label; section.appendChild(title);
+    items.forEach(h=>{
+      const row=document.createElement('div'); row.className='history-item';
+      const when=new Date(h.when);
+      row.innerHTML='<b>'+escapeHtml(h.name)+'</b><div>'+escapeHtml(h.day)+' · '+when.toLocaleDateString()+' · '+when.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'</div>';
+      section.appendChild(row);
+    });
+    hist.appendChild(section);
+  });
+  if(!any){
+    const p=document.createElement('p'); p.textContent='No completed exercises yet.';
+    hist.appendChild(p);
+  }
+}
 function showRoutine(){routineView.classList.remove('hidden');historyView.classList.add('hidden');routineBtn.className='primary';historyBtn.className='secondary'}
 addBtn.onclick=add;exerciseInput.onkeydown=e=>{if(e.key==='Enter')add()};routineBtn.onclick=showRoutine;historyBtn.onclick=()=>{routineView.classList.add('hidden');historyView.classList.remove('hidden');routineBtn.className='secondary';historyBtn.className='primary';renderHistory()};clearHistory.onclick=()=>{if(confirm('Clear all completion history?')){history=[];save();renderHistory()}};render();
 setInterval(()=>{resetWeeklyIfNeeded();render()},60000);
