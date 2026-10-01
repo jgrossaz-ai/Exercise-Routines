@@ -1,102 +1,39 @@
-<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1,viewport-fit=cover'><meta name='theme-color' content='#f5f5f7'><link rel='manifest' href='manifest.json'><link rel='apple-touch-icon' href='icon.svg'><title>Exercise Routines</title><style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#f5f5f7}*{box-sizing:border-box}body{margin:0}header{position:sticky;top:0;background:rgba(245,245,247,.94);backdrop-filter:blur(12px);padding:18px 16px 12px;border-bottom:1px solid #ddd;z-index:2}h1{font-size:28px;margin:0 0 12px}.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:2px}.tabs button,.primary,.secondary,.done,.danger{border:0;border-radius:12px;font-size:16px;font-weight:650;padding:12px 14px}.tabs button{background:#e5e5ea;white-space:nowrap}.tabs button.active,.primary{background:#007aff;color:white}main{max-width:700px;margin:auto;padding:16px 16px 90px}.card{background:white;border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 1px 3px #0001}.row{display:flex;gap:10px;align-items:center}.row input{flex:1;border:1px solid #ccc;border-radius:12px;padding:13px;font-size:17px}.exercise{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #eee}.exercise:last-child{border:0}.name{flex:1;font-size:18px}.done{background:#ffd60a;color:#111}.done.confirmed{background:#34c759;color:white}.danger{background:#ff3b30;color:white;padding:10px 12px}.secondary{background:#e5e5ea}.empty{color:#666;padding:10px 0}.history-item{padding:12px 0;border-bottom:1px solid #eee}.history-item:last-child{border:0}.history-item b{display:block;font-size:17px}.history-item span{color:#666;font-size:14px}.nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;display:flex;justify-content:center;gap:8px;padding:10px max(12px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left));z-index:3}.nav button{flex:1;max-width:330px}.hidden{display:none}.history-group{margin-top:20px}
-.history-group h3{margin:0 0 8px;font-size:18px}
-.summary{background:#f3f4f6;border-radius:12px;padding:14px;margin:10px 0 18px;font-weight:700}
-.summary small{display:block;margin-top:4px;font-weight:500;color:#4b5563}
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f5f5f7"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon.svg"><title>Exercise Routines</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#111;background:#f5f5f7}*{box-sizing:border-box}body{margin:0}button,input{font:inherit}header{position:sticky;top:0;background:rgba(245,245,247,.96);backdrop-filter:blur(12px);padding:12px 14px 9px;border-bottom:1px solid #ddd;z-index:5}.top{display:flex;align-items:center;justify-content:space-between;gap:10px}h1{font-size:22px;margin:0}.menu-wrap{position:relative}.iconbtn{border:0;background:transparent;font-size:26px;padding:4px 8px}.menu{position:absolute;right:0;top:40px;background:#fff;border:1px solid #ddd;border-radius:14px;box-shadow:0 8px 30px #0002;min-width:205px;padding:6px;z-index:10}.menu button{display:block;width:100%;text-align:left;border:0;background:#fff;padding:12px;border-radius:10px;font-weight:600}.menu button:active{background:#eee}.tabs{display:flex;gap:7px;overflow:auto;padding-top:10px}.tabs button,.primary,.secondary,.danger{border:0;border-radius:11px;font-weight:650;padding:10px 12px}.tabs button{background:#e5e5ea;white-space:nowrap}.tabs button.active,.primary{background:#007aff;color:#fff}.secondary{background:#e5e5ea}.danger{background:#ff3b30;color:#fff}main{max-width:700px;margin:auto;padding:14px 14px calc(24px + env(safe-area-inset-bottom))}.card{background:#fff;border-radius:17px;padding:14px;margin-bottom:12px;box-shadow:0 1px 3px #0001}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.small{padding:7px 10px;font-size:14px}.exercise-list{max-height:52vh;overflow-y:auto;-webkit-overflow-scrolling:touch}.exercise{display:flex;align-items:center;gap:9px;padding:12px 0;border-bottom:1px solid #eee}.exercise:last-child{border:0}.name{flex:1;min-width:0;font-size:18px;overflow-wrap:anywhere}.check{border:0;background:transparent;font-size:25px;padding:4px;line-height:1}.check.done{color:#34c759}.trash{border:0;background:transparent;color:#ff3b30;font-size:19px;padding:5px}.empty,.muted{color:#666}.hidden{display:none!important}.modal{position:fixed;inset:0;background:#0006;display:flex;align-items:flex-end;justify-content:center;z-index:20}.sheet{background:#f5f5f7;width:100%;max-width:700px;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-height:80vh;overflow:auto}.sheet h2{margin-top:0}.row{display:flex;gap:8px;align-items:center}.row input{flex:1;border:1px solid #ccc;border-radius:11px;padding:12px;font-size:17px}.history-item{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid #eee}.history-item:last-child{border:0}.history-main{flex:1;min-width:0}.history-item b{display:block;font-size:17px}.history-item span{color:#666;font-size:14px}.history-delete{border:0;background:transparent;color:#ff3b30;font-size:18px;padding:8px}.history-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}.summary{font-weight:700;margin-bottom:8px}.group-title{font-size:15px;color:#666;margin:16px 0 3px}.reorder-row{display:flex;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid #eee}.reorder-row .name{font-size:17px}.move{border:0;background:#e5e5ea;border-radius:9px;padding:7px 10px;font-weight:800}.backup-actions{display:grid;gap:10px}.filelabel{display:block;text-align:center}.note{font-size:13px;color:#666;line-height:1.35}
 </style></head><body>
-<header><h1>Exercise Routines</h1><div id='dayTabs' class='tabs'></div></header>
-<main><section id='routineView'><div class='card'><h2 id='dayTitle'></h2><div class='row'><input id='exerciseInput' placeholder='Enter an exercise' autocomplete='off'><button id='addBtn' class='primary'>Add</button></div></div><div id='exerciseList' class='card'></div></section><section id='historyView' class='hidden'><div class='card'><div class='row' style='justify-content:space-between'><h2 style='margin:0'>Completed Exercises</h2><button id='clearHistory' class='secondary'>Clear</button></div><div id='historyList'></div></div></section></main>
-<div class='nav'><button id='routineBtn' class='primary'>Weekly Routine</button><button id='historyBtn' class='secondary'>History</button></div>
+<header><div class="top"><h1>Exercise Routines</h1><div class="menu-wrap"><button id="menuBtn" class="iconbtn" aria-label="Menu">•••</button><div id="menu" class="menu hidden"><button data-action="add">＋ Add Exercise</button><button data-action="history">◷ View History</button><button data-action="reorder">↕ Reorder Exercises</button><button data-action="backup">⇩ Backup / Restore</button></div></div></div><div id="dayTabs" class="tabs"></div></header>
+<main><section id="routineView"><div class="toolbar"><div id="dayLabel" style="font-weight:700"></div><button id="quickAdd" class="secondary small">＋ Add Exercise</button></div><div id="exerciseList" class="card exercise-list"></div></section><section id="historyView" class="hidden"><div class="card"><div class="toolbar"><h2 style="margin:0;font-size:21px">History</h2><button id="backRoutine" class="secondary small">Weekly Routine</button></div><div id="historySummary" class="summary"></div><div class="history-actions"><button id="deleteOldHistory" class="secondary small">Delete Older Than 30 Days</button><button id="clearHistory" class="danger small">Clear All History</button></div><div id="historyList"></div></div></section></main>
+<div id="modal" class="modal hidden"><div id="sheet" class="sheet"></div></div>
 <script>
 const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const keyR='exerciseRoutines.v1',keyH='exerciseHistory.v1',keyC='exerciseCompleted.v1';
-let routines=JSON.parse(localStorage.getItem(keyR)||'{}'),
-    history=JSON.parse(localStorage.getItem(keyH)||'[]'),
-    completed=JSON.parse(localStorage.getItem(keyC)||'{}');
-days.forEach(d=>routines[d]??=[]);
-
-function mostRecentSundayEvening(){
-  const now=new Date(), boundary=new Date(now);
-  const daysSinceSunday=now.getDay();
-  boundary.setDate(now.getDate()-daysSinceSunday);
-  boundary.setHours(19,0,0,0);
-  if(now<boundary) boundary.setDate(boundary.getDate()-7);
-  return boundary;
-}
-function resetWeeklyIfNeeded(){
-  const boundary=mostRecentSundayEvening().getTime();
-  let changed=false;
-  Object.keys(completed).forEach(k=>{
-    if(Number(completed[k])<boundary){delete completed[k];changed=true}
-  });
-  if(changed) localStorage.setItem(keyC,JSON.stringify(completed));
-}
+let routines=read(keyR,{}),history=read(keyH,[]),completed=read(keyC,{});days.forEach(d=>routines[d]??=[]);
+let selected=days[(new Date().getDay()+6)%7], view='routine';
+function read(k,f){try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f))}catch{return f}}
+function save(){localStorage.setItem(keyR,JSON.stringify(routines));localStorage.setItem(keyH,JSON.stringify(history));localStorage.setItem(keyC,JSON.stringify(completed))}
+function mostRecentSundayEvening(){const now=new Date(),b=new Date(now);b.setDate(now.getDate()-now.getDay());b.setHours(19,0,0,0);if(now<b)b.setDate(b.getDate()-7);return b}
+function resetWeeklyIfNeeded(){const boundary=mostRecentSundayEvening().getTime();let changed=false;Object.keys(completed).forEach(k=>{if(Number(completed[k])<boundary){delete completed[k];changed=true}});if(changed)save()}
 function completionKey(day,name){return day+'::'+name}
-resetWeeklyIfNeeded();
-let selected=days[(new Date().getDay()+6)%7];
-const save=()=>{localStorage.setItem(keyR,JSON.stringify(routines));localStorage.setItem(keyH,JSON.stringify(history));localStorage.setItem(keyC,JSON.stringify(completed))};
-function renderTabs(){dayTabs.innerHTML='';days.forEach(d=>{let b=document.createElement('button');b.textContent=d.slice(0,3);b.className=d===selected?'active':'';b.onclick=()=>{selected=d;showRoutine();render()};dayTabs.appendChild(b)})}
-function render(){renderTabs();dayTitle.textContent=selected;exerciseList.innerHTML='';if(!routines[selected].length) exerciseList.innerHTML='<div class="empty">No exercises entered for this day yet.</div>';routines[selected].forEach((x,i)=>{let el=document.createElement('div');el.className='exercise';let n=document.createElement('div');n.className='name';n.textContent=x;let done=document.createElement('button');let ck=completionKey(selected,x);let isDone=!!completed[ck];done.className='done'+(isDone?' confirmed':'');done.textContent=isDone?'✓ Completed':'Completed ?';done.disabled=isDone;done.onclick=()=>complete(x,done);let del=document.createElement('button');del.className='danger';del.textContent='Delete';del.onclick=()=>{if(confirm('Delete this exercise?')){routines[selected].splice(i,1);save();render()}};el.append(n,done,del);exerciseList.appendChild(el)})}
-function add(){let x=exerciseInput.value.trim();if(!x)return;routines[selected].push(x);exerciseInput.value='';save();render()}
-function complete(name,button){
-  const now=new Date();
-  completed[completionKey(selected,name)]=now.getTime();
-  history.unshift({name,day:selected,when:now.toISOString()});
-  save();
-  button.textContent='✓ Completed';
-  button.classList.add('confirmed');
-  button.disabled=true;
-}
-function startOfWeek(d){
-  const x=new Date(d), diff=(x.getDay()+6)%7;
-  x.setDate(x.getDate()-diff); x.setHours(0,0,0,0); return x;
-}
-function renderHistory(){
-  hist.innerHTML='';
-  const now=new Date(), thisStart=startOfWeek(now), lastStart=new Date(thisStart);
-  lastStart.setDate(lastStart.getDate()-7);
-
-  const totalThisWeek=days.reduce((n,d)=>n+routines[d].length,0);
-  const doneThisWeek=Object.keys(completed).filter(k=>Number(completed[k])>=thisStart.getTime()).length;
-
-  const summary=document.createElement('div');
-  summary.className='summary';
-  summary.textContent=doneThisWeek+' of '+totalThisWeek+' exercises completed this week';
-  const small=document.createElement('small');
-  small.textContent=totalThisWeek ? Math.round(doneThisWeek/totalThisWeek*100)+'% complete' : 'Add exercises to begin tracking your week.';
-  summary.appendChild(small);
-  hist.appendChild(summary);
-
-  const groups={'This Week':[],'Last Week':[],'Older':[]};
-  history.forEach(h=>{
-    const dt=new Date(h.when);
-    if(dt>=thisStart) groups['This Week'].push(h);
-    else if(dt>=lastStart) groups['Last Week'].push(h);
-    else groups['Older'].push(h);
-  });
-
-  let any=false;
-  Object.entries(groups).forEach(([label,items])=>{
-    if(!items.length)return;
-    any=true;
-    const section=document.createElement('div'); section.className='history-group';
-    const title=document.createElement('h3'); title.textContent=label; section.appendChild(title);
-    items.forEach(h=>{
-      const row=document.createElement('div'); row.className='history-item';
-      const when=new Date(h.when);
-      row.innerHTML='<b>'+escapeHtml(h.name)+'</b><div>'+escapeHtml(h.day)+' · '+when.toLocaleDateString()+' · '+when.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+'</div>';
-      section.appendChild(row);
-    });
-    hist.appendChild(section);
-  });
-  if(!any){
-    const p=document.createElement('p'); p.textContent='No completed exercises yet.';
-    hist.appendChild(p);
-  }
-}
-function showRoutine(){routineView.classList.remove('hidden');historyView.classList.add('hidden');routineBtn.className='primary';historyBtn.className='secondary'}
-addBtn.onclick=add;exerciseInput.onkeydown=e=>{if(e.key==='Enter')add()};routineBtn.onclick=showRoutine;historyBtn.onclick=()=>{routineView.classList.add('hidden');historyView.classList.remove('hidden');routineBtn.className='secondary';historyBtn.className='primary';renderHistory()};clearHistory.onclick=()=>{if(confirm('Clear all completion history?')){history=[];save();renderHistory()}};render();
-setInterval(()=>{resetWeeklyIfNeeded();render()},60000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden){resetWeeklyIfNeeded();render()}});
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
+function renderTabs(){dayTabs.innerHTML='';days.forEach(d=>{const b=document.createElement('button');b.textContent=d.slice(0,3);b.className=d===selected?'active':'';b.onclick=()=>{selected=d;view='routine';render()};dayTabs.appendChild(b)})}
+function render(){resetWeeklyIfNeeded();renderTabs();dayLabel.textContent=selected;routineView.classList.toggle('hidden',view!=='routine');historyView.classList.toggle('hidden',view!=='history');if(view==='routine')renderRoutine();else renderHistory()}
+function renderRoutine(){exerciseList.innerHTML='';const arr=routines[selected];if(!arr.length){exerciseList.innerHTML='<div class="empty">No exercises entered for this day yet.</div>';return}arr.forEach((x,i)=>{const el=document.createElement('div');el.className='exercise';const n=document.createElement('div');n.className='name';n.textContent=x;const ck=completionKey(selected,x),isDone=!!completed[ck];const done=document.createElement('button');done.className='check'+(isDone?' done':'');done.textContent=isDone?'✓':'○';done.title=isDone?'Completed':'Mark completed';done.disabled=isDone;done.onclick=()=>complete(x);const del=document.createElement('button');del.className='trash';del.textContent='🗑';del.title='Delete exercise';del.onclick=()=>{if(confirm('Delete '+x+' from '+selected+'?')){arr.splice(i,1);save();renderRoutine()}};el.append(n,done,del);exerciseList.appendChild(el)})}
+function complete(name){const now=new Date();completed[completionKey(selected,name)]=now.getTime();history.unshift({name,day:selected,when:now.toISOString()});save();renderRoutine()}
+function weekStart(d=new Date()){const x=new Date(d);const delta=(x.getDay()+6)%7;x.setDate(x.getDate()-delta);x.setHours(0,0,0,0);return x}
+function groupFor(date){const ws=weekStart(),last=new Date(ws);last.setDate(last.getDate()-7);return date>=ws?'This Week':date>=last?'Last Week':'Older'}
+function renderHistory(){historyList.innerHTML='';const thisWeek=history.filter(h=>new Date(h.when)>=weekStart()).length;const total=days.reduce((n,d)=>n+routines[d].length,0);historySummary.textContent=`${thisWeek} completed this week • ${total} exercises scheduled`;if(!history.length){historyList.innerHTML='<div class="empty">No completed exercises yet.</div>';return}let prev='';history.forEach((h,index)=>{const d=new Date(h.when),g=groupFor(d);if(g!==prev){const gt=document.createElement('div');gt.className='group-title';gt.textContent=g;historyList.appendChild(gt);prev=g}const el=document.createElement('div');el.className='history-item';const main=document.createElement('div');main.className='history-main';main.onclick=()=>{selected=h.day;view='routine';render()};const b=document.createElement('b');b.textContent='✓ '+h.name;const s=document.createElement('span');s.textContent=h.day+' • '+d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})+' • '+d.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});main.append(b,s);const del=document.createElement('button');del.className='history-delete';del.textContent='🗑';del.title='Delete history entry';del.onclick=e=>{e.stopPropagation();if(confirm('Delete this history entry for '+h.name+'?')){history.splice(index,1);save();renderHistory()}};el.append(main,del);historyList.appendChild(el)})}
+function deleteHistoryOlderThan30Days(){const cutoff=Date.now()-30*24*60*60*1000;const count=history.filter(h=>new Date(h.when).getTime()<cutoff).length;if(!count){alert('There are no history entries older than 30 days.');return}if(confirm(`Delete ${count} history entr${count===1?'y':'ies'} older than 30 days? This will not change your weekly routines.`)){history=history.filter(h=>new Date(h.when).getTime()>=cutoff);save();renderHistory()}}
+function clearAllHistory(){if(!history.length){alert('History is already empty.');return}if(confirm('Permanently delete ALL exercise history? Your weekly routines will not be affected.')){history=[];save();renderHistory()}}
+function openSheet(html){sheet.innerHTML=html;modal.classList.remove('hidden')}
+function closeSheet(){modal.classList.add('hidden');sheet.innerHTML=''}
+function addSheet(){openSheet(`<h2>Add Exercise — ${selected}</h2><div class="row"><input id="newEx" placeholder="Exercise name" autocomplete="off"><button id="saveEx" class="primary">Add</button></div><p><button id="cancelSheet" class="secondary">Cancel</button></p>`);const input=document.getElementById('newEx');input.focus();const add=()=>{const x=input.value.trim();if(!x)return;routines[selected].push(x);save();closeSheet();renderRoutine()};saveEx.onclick=add;input.onkeydown=e=>{if(e.key==='Enter')add()};cancelSheet.onclick=closeSheet}
+function reorderSheet(){openSheet(`<h2>Reorder — ${selected}</h2><div id="reorderList" class="card"></div><button id="doneReorder" class="primary">Done</button>`);renderReorder();doneReorder.onclick=closeSheet}
+function renderReorder(){const box=document.getElementById('reorderList');if(!box)return;box.innerHTML='';routines[selected].forEach((x,i)=>{const r=document.createElement('div');r.className='reorder-row';const n=document.createElement('div');n.className='name';n.textContent=x;const up=document.createElement('button');up.className='move';up.textContent='↑';up.disabled=i===0;up.onclick=()=>move(i,-1);const down=document.createElement('button');down.className='move';down.textContent='↓';down.disabled=i===routines[selected].length-1;down.onclick=()=>move(i,1);r.append(n,up,down);box.appendChild(r)})}
+function move(i,dir){const a=routines[selected],j=i+dir;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];save();renderReorder();renderRoutine()}
+function backupSheet(){openSheet(`<h2>Backup / Restore</h2><div class="backup-actions"><button id="exportBtn" class="primary">Download Backup</button><label class="secondary filelabel">Restore From Backup<input id="importFile" type="file" accept="application/json,.json" hidden></label><button id="cancelSheet" class="secondary">Close</button></div><p class="note">A backup contains your routines, completion status, and history. Keep the downloaded file somewhere safe, such as iCloud Drive.</p>`);exportBtn.onclick=exportBackup;importFile.onchange=importBackup;cancelSheet.onclick=closeSheet}
+function exportBackup(){const data={app:'Exercise Routines',version:2,exportedAt:new Date().toISOString(),routines,history,completed};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='exercise-routines-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function importBackup(e){const f=e.target.files[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{try{const d=JSON.parse(reader.result);if(!d.routines||!Array.isArray(d.history)||!d.completed)throw new Error();if(!confirm('Replace the current routines and history with this backup?'))return;routines=d.routines;history=d.history;completed=d.completed;days.forEach(day=>routines[day]??=[]);save();closeSheet();render();alert('Backup restored.')}catch{alert('That file is not a valid Exercise Routines backup.')}};reader.readAsText(f)}
+menuBtn.onclick=e=>{e.stopPropagation();menu.classList.toggle('hidden')};document.addEventListener('click',()=>menu.classList.add('hidden'));menu.onclick=e=>{e.stopPropagation();const a=e.target.closest('button')?.dataset.action;if(!a)return;menu.classList.add('hidden');if(a==='add')addSheet();if(a==='history'){view='history';render()}if(a==='reorder')reorderSheet();if(a==='backup')backupSheet()};quickAdd.onclick=addSheet;backRoutine.onclick=()=>{view='routine';render()};deleteOldHistory.onclick=deleteHistoryOlderThan30Days;clearHistory.onclick=clearAllHistory;modal.onclick=e=>{if(e.target===modal)closeSheet()};
+resetWeeklyIfNeeded();render();setInterval(()=>{resetWeeklyIfNeeded();render()},60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js');
 </script></body></html>
